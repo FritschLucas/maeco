@@ -5,15 +5,18 @@ from citylearn.citylearn import CityLearnEnv
 from IPython.display import display
 
 env = CityLearnEnv('citylearn_challenge_2023_phase_2_local_evaluation', central_agent=False) # notre environnement d'évaluation
-agent = BasicRBC(env) # agent RBC de base
+model = BasicRBC(env) # agent RBC de base
 
+"""
 obs, _ = env.reset() # obs est un liste par bâtiment
 while not (env.terminated or env.truncated):
-    actions = agent.predict(obs)
+    actions = model.predict(obs)
     obs, reward, done, trunc, info = env.step(actions) # on avance d'un step
+"""
+model.learn(episodes=1,deterministic_finish=True)
 
 # résultats
-kpis = env.evaluate()
+kpis = model.env.evaluate()
 kpis = kpis.pivot(index='cost_function', columns='name', values='value').round(3)
 kpis = kpis.dropna(how='all')
 display(kpis)
